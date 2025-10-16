@@ -1,0 +1,33 @@
+name: metabase-app
+services:
+- name: metabase
+  source_dir: /
+  github:
+    repo: your-username/metabase-deployment
+    branch: main
+  run_command: docker-compose up metabase
+  environment_slug: docker
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 3000
+  envs:
+  - key: POSTGRES_DB
+    value: metabase
+  - key: POSTGRES_USER
+    value: metabase
+  - key: POSTGRES_PASSWORD
+    type: SECRET
+    value: your-secure-password-here
+  - key: MB_DB_TYPE
+    value: postgres
+  - key: MB_DB_PORT
+    value: "5432"
+  - key: JAVA_TOOL_OPTIONS
+    value: "-Xmx512m"
+
+databases:
+- name: metabase-db
+  engine: PG
+  version: "15"
+  size: basic
+  num_nodes: 1

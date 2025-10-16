@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: metabase-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-metabase}
+      POSTGRES_USER: ${POSTGRES_USER:-metabase}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-metabase_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - metabase-network
+    restart: unless-stopped
+
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase-app
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: ${POSTGRES_DB:-metabase}
+      MB_DB_PORT: 5432
+      MB_DB_USER: ${POSTGRES_USER:-metabase}
+      MB_DB_PASS: ${POSTGRES_PASSWORD:-metabase_password}
+      MB_DB_HOST: postgres
+      JAVA_TOOL_OPTIONS: -Xmx512m
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    networks:
+      - metabase-network
+    restart: unless-stopped
+    volumes:
+      - metabase_data:/metabase-data
+
+volumes:
+  postgres_data:
+  metabase_data:
+
+networks:
+  metabase-network:
+    driver: bridge

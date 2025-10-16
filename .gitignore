@@ -1,0 +1,13 @@
+# Environment files
+.env
+
+# Docker volumes
+postgres_data/
+metabase_data/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
