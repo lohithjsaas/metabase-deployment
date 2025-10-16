@@ -5,23 +5,23 @@ services:
   github:
     repo: your-username/metabase-deployment
     branch: main
-  run_command: docker-compose up metabase
-  environment_slug: docker
+  dockerfile_path: Dockerfile
   instance_count: 1
   instance_size_slug: basic-xxs
   http_port: 3000
   envs:
-  - key: POSTGRES_DB
-    value: metabase
-  - key: POSTGRES_USER
-    value: metabase
-  - key: POSTGRES_PASSWORD
-    type: SECRET
-    value: your-secure-password-here
+  - key: MB_DB_DBNAME
+    value: ${metabase-db.DATABASE}
+  - key: MB_DB_USER
+    value: ${metabase-db.USERNAME}
+  - key: MB_DB_PASS
+    value: ${metabase-db.PASSWORD}
+  - key: MB_DB_HOST
+    value: ${metabase-db.HOSTNAME}
+  - key: MB_DB_PORT
+    value: ${metabase-db.PORT}
   - key: MB_DB_TYPE
     value: postgres
-  - key: MB_DB_PORT
-    value: "5432"
   - key: JAVA_TOOL_OPTIONS
     value: "-Xmx512m"
 
